@@ -29,16 +29,6 @@
         <div class="invalid-feedback">Please enter task comment.</div>
     </div>
 
-    <div class="mb-3">
-        <label for="image">Image for issue</label>
-        <img id="issue-preview" style="max-width:400px;"
-             src=@if(isset($issue) && !empty($issue->image)) "{{$issue->image}}" @else
-            "/img/placeholder.jpg" @endif
-        alt="Issue image preview">
-        @if(!isset($issueCreated))
-            <input type="file" class="form-control" id="image" name="image">
-        @endif
-    </div>
     @if(isset($issueCreated))
         <div class="mb-3">
             <label for="email">Status: <span class="text-muted"></span> {{$issue->statusString}}</label>

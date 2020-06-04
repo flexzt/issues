@@ -26,21 +26,6 @@ class Issue extends SystemModel
     }
 
     /**
-     * Get a task from database
-     *
-     * @param integer $issueId
-     *
-     * @return object $db
-     */
-    public function getIssue($issueId)
-    {
-        $query = $this->db->prepare('SELECT * FROM issue WHERE id = :id LIMIT 1');
-        $query->execute([':id' => $issueId]);
-
-        return $this->makeSingle($query->fetch());
-    }
-
-    /**
      * Add a issue to database
      *
      * @param Request $request
@@ -59,37 +44,8 @@ class Issue extends SystemModel
                 ':email'    => $request->request->get('email'),
                 ':comments' => $request->request->get('comments'),
             ]);
-        $issueId = $this->db->lastInsertId();
 
-        if ($request->files->get('image')) {
-            $this->uploadImage(
-                $request->files->get('image'),
-                $issueId
-            );
-        }
-
-        return $issueId;
-    }
-
-    /**
-     * @param UploadedFile $file
-     * @param integer      $issueId
-     * @param string       $targetFileName
-     */
-    public function uploadImage(UploadedFile $file, $issueId, string $targetFileName = null)
-    {
-        if ($target = $file->move(
-            Context::App()->config->basePath . '/public/img/issue',
-            $targetFileName ?? $file->getClientOriginalName()
-        )) {
-            $this->db
-                ->prepare(
-                    'UPDATE `issue` SET image = :image WHERE id = :id'
-                )->execute([
-                    ':id'    => $issueId,
-                    ':image' => '/img/issue/' . $target->getBasename(),
-                ]);
-        }
+        return $this->db->lastInsertId();
     }
 
     /**
@@ -122,12 +78,20 @@ class Issue extends SystemModel
                 ':status'   => $status,
                 ':comments' => $request->request->get('comments'),
             ]);
+    }
 
-        if ($request->files->get('image')) {
-            $this->uploadImage(
-                $request->files->get('image'),
-                $issueId
-            );
-        }
+    /**
+     * Get a task from database
+     *
+     * @param integer $issueId
+     *
+     * @return object $db
+     */
+    public function getIssue($issueId)
+    {
+        $query = $this->db->prepare('SELECT * FROM issue WHERE id = :id LIMIT 1');
+        $query->execute([':id' => $issueId]);
+
+        return $this->makeSingle($query->fetch());
     }
 }
