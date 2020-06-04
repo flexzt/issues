@@ -4,8 +4,7 @@ namespace App\Models;
 
 use App\System\base\Request;
 use App\System\base\SystemModel;
-use App\System\Context;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Support\Collection;
 
 /**
  * Class Issue
@@ -16,6 +15,8 @@ class Issue extends SystemModel
 {
     /**
      * Get all tasks
+     *
+     * @return Collection
      */
     public function getAll()
     {
@@ -30,7 +31,7 @@ class Issue extends SystemModel
      *
      * @param Request $request
      *
-     * @return string
+     * @return int
      */
     public function addIssue(Request $request)
     {
@@ -83,9 +84,10 @@ class Issue extends SystemModel
     /**
      * Get a task from database
      *
-     * @param integer $issueId
+     * @param $issueId
      *
-     * @return object $db
+     * @return \App\Models\Entities\Issue
+     * @throws \ReflectionException
      */
     public function getIssue($issueId)
     {
