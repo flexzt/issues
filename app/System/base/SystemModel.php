@@ -19,7 +19,7 @@ class SystemModel extends PropertyModel
     /**
      * @var Collection
      */
-    protected $colection;
+    protected $collection;
 
     /**
      * SystemModel constructor.
